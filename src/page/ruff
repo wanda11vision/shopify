@@ -1,0 +1,487 @@
+
+// import React, { useState, useEffect } from 'react';
+// import Nav from './Nav';
+// import './home.css';
+// import items from './Data';
+
+// function Home({ addcart2, cart, search, setSearch }) {
+//   const filteredItems = items.filter((p) =>
+//     p.name.toLowerCase().includes(search.toLowerCase())
+//   );
+
+//   // ----------------- Popup for Add to Cart -----------------
+//   const [popup, setPopup] = useState(false);
+//   const showPopup = () => {
+//     setPopup(true);
+//     setTimeout(() => setPopup(false), 2000);
+//   };
+
+//   // ----------------- Slider -----------------
+//   const sliderData = [
+//     { img: '/images/laptop.webp', text: 'Best Laptops 2025',text2:'Starting At $999 The best notebook collection 2024Exclusive offer -10% off this week' },
+//     { img: '/images/h1.webp', text: 'Latest Gadgets' },
+//     { img: '/images/h2.webp', text: 'Smart Accessories' },
+//     { img: '/images/h3.webp', text: 'Top Deals' },
+//     { img: '/images/b2.png', text: 'Fashion Sale' },
+//   ];
+
+//   const [currentIndex, setCurrentIndex] = useState(0);
+
+//   // Auto slide every 5 seconds
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setCurrentIndex((prev) => (prev + 1) % sliderData.length);
+//     }, 5000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+
+
+//   // Manual slide handlers
+//   const prevSlide = () => {
+//     setCurrentIndex((prev) =>
+//       prev === 0 ? sliderData.length - 1 : prev - 1
+//     );
+//   };
+//   const nextSlide = () => {
+//     setCurrentIndex((prev) => (prev + 1) % sliderData.length);
+//   };
+
+
+
+//   return (
+//     <div className="h-screen">
+//       {/* Navigation */}
+//       <Nav cart={cart} setSearch={setSearch} />
+//       <div className="h-[10%] w-[100%]"></div>
+
+//       {/* Slider Section */}
+//       <div className="imgdiv relative h-[50%] border flex items-center justify-center overflow-hidden">
+
+//         {/* Text Overlay */}
+//         <div className=" w-[40%] h-[100%] flex flex-col items-center justify-center ] ">
+//           <h1 className="text-xl font-bold">{sliderData[currentIndex].text}</h1>
+//           <h1 className="text-[35px] font-semibold">{sliderData[currentIndex].text2}</h1>
+//           <button className="p-4 m-3 rounded-lg bg-gray-200">Shop Now</button>
+//         </div>
+
+//         {/* Image */}
+//         <img
+//           src={sliderData[currentIndex].img}
+//           alt="slider"
+//           className="w-[50%] h-[100%] object-contain transition-transform duration-[2s]"
+//         />
+
+//         {/* Prev/Next Buttons */}
+//         <button
+//           onClick={prevSlide}
+//           className="absolute left-2 top-[50%] -translate-y-1/2 bg-gray-300 text-white px-3 py-1 rounded"
+//         >
+//           ❮
+//         </button>
+//         <button
+//           onClick={nextSlide}
+//           className="absolute right-2 top-[50%] -translate-y-1/2 bg-gray-300 text-white px-3 py-1 rounded"
+//         >
+//           ❯
+//         </button>
+
+//         {/* Dots */}
+//         <div className="absolute bottom-2 flex space-x-2">
+//           {sliderData.map((_, i) => (
+//             <span
+//               key={i}
+//               className={`h-2 w-2 rounded-full cursor-pointer ${
+//                 i === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
+//               }`}
+//               onClick={() => setCurrentIndex(i)}
+//             ></span>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Add to cart popup */}
+//       {popup && (
+//         <div className="h-[15%] w-[30%] text-[18px] font-bold flex items-center flex-col justify-center fixed text-rose-600 bg-yellow-300 rounded left-[600px] top-[300px]">
+//           <h3>✅ Item Added to cart!</h3>
+//           <p>Your item has been added successfully 🛒</p>
+//         </div>
+//       )}
+
+//       {/* Trending Products */}
+//       <div className="itemdiv flex flex-col items-center justify-center">
+//         <div className="w-[85%] m-4 flex">
+//           <h1 className="text-4xl font-semibold">Trending Products</h1>
+//         </div>
+
+//         <div className="itemdiv2 flex justify-around flex-wrap">
+//           {filteredItems.length === 0 ? (
+//             <h2 className="h-[15%] w-[25%] text-[25px] bg-yellow-400 text-rose-600 font-bold flex items-center flex-col justify-center fixed rounded left-[600px] top-[300px]">
+//               No products found 😢
+//             </h2>
+//           ) : (
+//             filteredItems.map((p, i) => (
+//               <div
+//                 key={i}
+//                 className="card border flex flex-col items-center justify-around m-2"
+//               >
+//                 <div className="cardimg flex items-center justify-center">
+//                   <img
+//                     src={p.photo}
+//                     alt={p.name}
+//                     className="transition-transform duration-500 hover:scale-125"
+//                   />
+//                 </div>
+
+//                 <div className="cardtxt flex border w-[100%]">
+//                   <div className="w-[100%] px-3 text-left flex justify-around flex-col">
+//                     <h1 className="font-semibold hover:underline text-black text-[15px]">
+//                       {p.name}
+//                     </h1>
+//                     <h1 className="text-[8px]">{p.rating}</h1>
+//                     <h1 className="text-[18px] text-blue-500">{p.rate}</h1>
+//                     <button
+//                       onClick={() => {
+//                         addcart2(p);
+//                         showPopup();
+//                       }}
+//                       className="w-[60%] flex items-center justify-center p-2 text-xs hover:bg-blue-500 hover:text-white rounded bg-gray-200"
+//                     >
+//                       Add to cart 🛒
+//                     </button>
+//                   </div>
+//                 </div>
+//               </div>
+//             ))
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Home;
+ 
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import Nav from './Nav';
+// import './home.css';
+// import items from './Data';
+
+// function Home({ addcart2, cart, search, setSearch }) {
+//   // Filter products based on search
+//   const filteredItems = items.filter((p) =>
+//     p.name.toLowerCase().includes(search.toLowerCase())
+//   );
+
+//   // Popup state for "Item Added"
+//   const [popup, setPopup] = useState(false);
+
+//   // Slider state
+//   const [currentIndex, setCurrentIndex] = useState(0);
+
+//   // Images for slider
+//   const sliderImages = [
+//     'images/laptop.webp',
+//     'images/f2.webp',
+//     'images/f3.webp'
+//   ];
+
+//   // Show popup for 2 seconds
+//   const showPopup = () => {
+//     setPopup(true);
+//     setTimeout(() => setPopup(false), 2000);
+//   };
+
+//   // Slider: next and previous
+//   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % sliderImages.length);
+//   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + sliderImages.length) % sliderImages.length);
+
+//   // Auto slide every 3 seconds
+//   useEffect(() => {
+//     const interval = setInterval(() => nextSlide(), 3000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   return (
+//     <div className='h-screen'>
+//       <div className='hmain'>
+//         {/* Navbar */}
+//         <Nav cart={cart} setSearch={setSearch} />
+
+//         {/* Spacer for fixed navbar */}
+//         <div className='h-[10%] w-[100%]'></div>
+
+//         {/* Image Slider */}
+//         <div className='imgdiv relative bg-blue-100 h-[50%] border-2 border-black-500 flex items-center justify-center'>
+//           <img
+//             src={sliderImages[currentIndex]}
+//             alt="slider"
+//             className='w-full h-full object-contain transition-transform duration-500'
+//           />
+//           {/* Previous Button */}
+//           <button
+//             onClick={prevSlide}
+//             className='absolute left-2 top-1/2 -translate-y-1/2 bg-gray-300 p-2 rounded hover:bg-gray-500'
+//           >
+//             ❮
+//           </button>
+//           {/* Next Button */}
+//           <button
+//             onClick={nextSlide}
+//             className='absolute right-2 top-1/2 -translate-y-1/2 bg-gray-300 p-2 rounded hover:bg-gray-500'
+//           >
+//             ❯
+//           </button>
+//         </div>
+
+//         {/* Popup for "Item Added" */}
+//         {popup && (
+//           <div className='h-[15%] w-[30%] text-[18px] font-bold flex items-center flex-col justify-center fixed text-rose-600 bg-yellow-300 rounded left-[600px] top-[300px]'>
+//             <h3>✅ Item Added to cart!</h3>
+//             <p>Your item has been added successfully 🛒</p>
+//           </div>
+//         )}
+
+//         {/* Trending Products Section */}
+//         <div className='itemdiv flex flex-col items-center justify-center'>
+//           <div className='w-[85%] m-4 flex'>
+//             <h1 className='text-4xl font-semibold'>Trending Products</h1>
+//           </div>
+
+//           <div className='itemdiv2 flex justify-around'>
+//             {/* No products found */}
+//             {filteredItems.length === 0 ? (
+//               <h2 className='h-[15%] w-[25%] text-[25px] bg-yellow-400 text-rose-600 font-bold flex items-center flex-col justify-center fixed rounded left-[600px] top-[300px]'>
+//                 No products found 😢
+//               </h2>
+//             ) : (
+//               // Map through filtered products
+//               filteredItems.map((p, i) => (
+//                 <div key={i} className='card border flex flex-col items-center justify-around'>
+//                   <div className='cardimg flex items-center justify-center'>
+//                     <img
+//                       src={p.photo}
+//                       alt={p.name}
+//                       className='transition-transform duration-500 hover:scale-125'
+//                     />
+//                   </div>
+
+//                   <div className='cardtxt flex border'>
+//                     <div className='w-[100%] px-3 text-left flex justify-around flex-col'>
+//                       <h1 className='font-semibold hover:underline text-black text-[15px]'>{p.name}</h1>
+//                       <h1 className='text-[8px]'>{p.rating}</h1>
+//                       <h1 className='text-[18px] text-blue-500'>{p.rate}</h1>
+//                       <button
+//                         onClick={() => {
+//                           addcart2(p);
+//                           showPopup();
+//                         }}
+//                         className='w-[60%] flex items-center justify-center p-2 text-xs hover:bg-blue-500 hover:text-white rounded bg-gray-200'
+//                       >
+//                         Add to cart 🛒
+//                       </button>
+//                     </div>
+//                   </div>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Home;
+
+
+
+
+
+// import React, { useState } from 'react';
+// import Nav from './Nav';
+// import './home.css';
+// import items from './Data';
+
+
+
+// function Home({ addcart2, cart, search, setSearch }) {
+//   const filteredItems = items.filter((p) =>
+//     p.name.toLowerCase().includes(search.toLowerCase())
+//   );
+
+
+//   const [popup, setPopup] = useState(false);
+
+//   // Close popup after 2 seconds
+//   const showPopup = () => {
+//     setPopup(true);
+
+//     setTimeout(() => {
+//       setPopup(false);
+//     }, 2000);
+//   };
+
+
+
+//   return (
+//     <div className='h-screen'>
+//       <div className='hmain'>
+//         <Nav cart={cart} setSearch={setSearch} />
+//         <div className='h-[10%] w-[100%] '></div>
+
+//         <div className='imgdiv bg-blue-100 h-[50%] border-2 border-black-500 flex'>
+//           <div className='h-[100%] w-[50%]' ></div>
+//           <div className="imgd2 bg-[url('images/laptop.webp')] bg-center bg-contain bg-no-repeat "></div>
+//         </div>
+
+//         {
+//           popup && (
+//             <div className='h-[15%] w-[30%] text-[18px] font-bold flex items-center flex-col justify-center fixed text-rose-600 bg-yellow-300 rounded left-[600px] top-[300px] '>
+//               <h3>✅ Item Added to cart!</h3>
+//               <p>Your item has been added successfully 🛒</p>
+//             </div>)}
+
+
+//         <div className='itemdiv flex flex-col items-center justify-center'>
+//           <div className='w-[85%] m-4 flex'><h1 className='text-4xl font-semibold'>Trending Products</h1></div>
+
+//           <div className='itemdiv2 flex justify-around '>
+//             {
+//               filteredItems.length === 0 ? (
+//                 <h2 className='h-[15%] w-[25%] text-[25px] bg-yellow-400 text-rose-600 font-bold flex items-center flex-col justify-center fixed rounded left-[600px] top-[300px] '>
+//                   No products found 😢</h2>
+//               ) : (
+
+
+//                 filteredItems.map((p, i) => (
+
+//                   <div key={i} className='card border flex flex-col items-center justify-around'>
+
+//                     <div className='cardimg flex items-center justify-center'>
+//                       <img src={p.photo} alt={p.name} className="transition-transform duration-500 hover:scale-125" />
+//                     </div>
+
+//                     <div className='cardtxt flex border' >
+//                       <div className='w-[100%] px-3 text-left flex justify-around flex-col'>
+//                         <h1 className='font-semibold hover:underline text-black text-[15px]'>{p.name}</h1>
+//                         <h1 className=' text-[8px]'>{p.rating}</h1>
+//                         <h1 className='text-[18px] text-blue-500'>{p.rate}</h1>
+//                         <button onClick={() => {
+//                           addcart2(p);
+//                           showPopup();
+//                         }} className='w-[60%] flex items-center justify-center p-2 text-xs hover:bg-blue-500 hover:text-white rounded bg-gray-200'>Add to cart 🛒</button>
+//                       </div>
+
+//                     </div>
+
+//                   </div>
+
+
+//                 ))
+//               )}
+
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+// export default Home
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { createHashRouter, RouterProvider } from 'react-router-dom';
+// import { useState, useEffect } from 'react';
+// import Home from './page/Home';
+// import Products from './page/Products';
+// import Login from './page/Login';
+// import Nav from './page/Nav';
+
+// function App() {
+//   const [cart, setCart] = useState(() => {
+//     const savedCart = localStorage.getItem('cart');
+//     return savedCart ? JSON.parse(savedCart) : [];
+//   });
+
+//   useEffect(() => {
+//     localStorage.setItem('cart', JSON.stringify(cart));
+//   }, [cart]);
+
+//   const addToCart = (item) => {
+//     setCart((prevCart) => {
+//       const existing = prevCart.find((it) => it.name === item.name);
+//       if (existing) {
+//         return prevCart.map((it) =>
+//           it.name === item.name ? { ...it, quantity: it.quantity + 1 } : it
+//         );
+//       } else {
+//         return [...prevCart, { ...item, quantity: 1 }];
+//       }
+//     });
+//   };
+
+//   const [search, setSearch] = useState("");
+
+//   const router = createHashRouter([
+//     {
+//       path: "/",
+//       element: (
+//         <>
+//           <Nav cart={cart} setSearch={setSearch} />
+//           <Home addcart2={addToCart} cart={cart} search={search} />
+//         </>
+//       )
+//     },
+//     {
+//       path: "/products",
+//       element: (
+//         <>
+//           <Nav cart={cart} setSearch={setSearch} />
+//           <Products cart={cart} setCart={setCart} />
+//         </>
+//       )
+//     },
+//     {
+//       path: "/login",
+//       element: (
+//         <>
+//           <Nav cart={cart} setSearch={setSearch} />
+//           <Login />
+//         </>
+//       )
+//     }
+//   ]);
+
+//   return <RouterProvider router={router} />;
+// }
+
+// export default App;
+
+
+
+
+
