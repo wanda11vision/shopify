@@ -5,6 +5,7 @@ import Home from './page/Home'
 import Products from './page/Products'
 import Login from './page/Login'
 import Product from './page/Product'
+import Categories from './page/Categories'
 
 function App() {
 
@@ -45,6 +46,10 @@ function App() {
     {
       path: '/',
       element: <Home addcart2={addToCart} cart={cart} search={search} setSearch={setSearch} />
+    },
+    {
+      path: '/Categories',
+      element: <Categories addcart2={addToCart} cart={cart} search={search} setSearch={setSearch} />
     },
     {
       path: '/login',
