@@ -1,4 +1,393 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react'
+// import Nav from './Nav'
+// import { NavLink } from 'react-router-dom';
+
+// function Products({ cart, setCart, setSearch }) {
+
+//   // --- Decrease quantity of item ---
+//   const decreaseQuantity = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart
+//         .map((it) =>
+//           it.name === itemsss.name
+//             ? { ...it, quantity: it.quantity - 1 }
+//             : it
+//         )
+//         .filter((it) => it.quantity > 0)
+//     );
+//   };
+
+//   // --- Increase quantity of item ---
+//   const increaseQuantity = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart.map((it) =>
+//         it.name === itemsss.name
+//           ? { ...it, quantity: it.quantity + 1 }
+//           : it
+//       )
+//     );
+//   };
+
+//   // --- Remove item completely ---
+//   const removeItem = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart.filter((it) => it.name !== itemsss.name)
+//     );
+//   };
+
+//   // --- Calculate total price ---
+//   const subtotal = cart.reduce(
+//     (acc, it) => acc + it.quantity * parseFloat(it.rate),
+//     0
+//   );
+//   const discount = subtotal * 0.1; // 10% discount
+//   const finalTotal = subtotal - discount;
+
+//   return (
+//     <div className="h-screen relative">
+//       <Nav cart={cart} setSearch={setSearch} />
+//       <div className="h-[15%] w-[100%] "></div>
+
+//       <div className="itemdiv h-auto w-[100%] flex flex-col items-center justify-center">
+
+
+
+
+//         {/* 🛒 Checkout Summary Section */}
+//         <div className="checkout total w-[85%] bg-white shadow-lg rounded-lg p-5 mb-6">
+
+//           {/* Subtotal, Discount & Final Total */}
+//           <div className="flex flex-col gap-2">
+//             <h2 className="text-lg font-semibold">🛒 Cart Summary</h2>
+
+//             <div className="flex justify-between text-gray-600">
+//               <span>Subtotal</span>
+//               <span>${subtotal.toFixed(2)}</span>
+//             </div>
+//             <div className="flex justify-between text-green-600">
+//               <span>Discount (10%)</span>
+//               <span>- ${discount.toFixed(2)}</span>
+//             </div>
+            
+//             <hr className="my-2" />
+//             <div className="flex justify-between text-xl font-bold">
+//               <span>Total</span>
+//               <span className="text-blue-600">${finalTotal.toFixed(2)}</span>
+//             </div>
+//           </div>
+
+//           {/* 🚚 Progress bar for free delivery */}
+//           <div className="mt-4">
+//             <p className="text-sm text-gray-500">
+//               🚚 Free delivery on orders above $100
+//             </p>
+//             <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+//               <div
+//                 className="bg-blue-500 h-2.5 rounded-full"
+//                 style={{
+//                   width: `${Math.min((subtotal / 100) * 100, 100)}%`,
+//                 }}
+//               ></div>
+//             </div>
+//           </div>
+
+//           {/* 🎟️ Coupon Code Input */}
+//           <div className="mt-4 flex gap-2">
+//             <input
+//               type="text"
+//               placeholder="Enter Coupon"
+//               className="border p-2 rounded w-2/3"
+//             />
+//             <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900">
+//               Apply
+//             </button>
+//           </div>
+
+//           {/* 🔘 Checkout Button */}
+//           <button className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-lg text-lg font-bold transition-transform transform hover:scale-105">
+//             Proceed to Checkout
+//           </button>
+//         </div>
+
+//         {/* 🛍️ Cart Items Section */}
+//         <div className="itemdiv2 h-auto w-[85%] flex justify-around flex-wrap">
+//           {cart.map((p, i) => (
+//             <div
+//               key={i}
+//               className="card border h-[48vh] w-[22%] m-3 flex flex-col items-start justify-around"
+//             >
+//               {/* Product Image */}
+//               <div className="cardimg h-[65%] w-full flex items-center justify-center">
+//                 <img
+//                   src={p.photo}
+//                   alt={p.title}
+//                   className="h-[80%] w-[60%] transition-transform duration-500 hover:scale-125"
+//                 />
+//               </div>
+
+//               {/* Product Details */}
+//               <div className="cardtxt h-[35%] w-full flex border">
+//                 <div className="w-[80%] px-3 text-left flex justify-around flex-col">
+//                   <NavLink to={`/product/${p.name}`}>
+//                     <h1 className="font-semibold hover:underline text-black text-[15px]">
+//                       {p.name}
+//                     </h1>
+//                   </NavLink>
+//                   <h1 className="text-[12px]">{p.rating}</h1>
+//                   <h1 className="text-[18px] text-blue-500">{p.rate}</h1>
+
+//                   {/* Quantity & Remove */}
+//                   <div className="border w-[80%] flex justify-around items-center ">
+//                     <button onClick={() => decreaseQuantity(p)}>
+//                       <b>-</b>
+//                     </button>
+//                     <h1>{p.quantity}</h1>
+//                     <button onClick={() => increaseQuantity(p)}>
+//                       <b>+</b>
+//                     </button>
+//                     <button onClick={() => removeItem(p)}>❌</button>
+//                   </div>
+//                 </div>
+
+//                 {/* Buy Now Button */}
+//                 <div className="w-[30%] flex items-center justify-center">
+//                   <NavLink to={"/login"}>
+//                     <button className="bg-gray-200 hover:bg-pink-600 hover:text-white text-black-700 rounded p-2 text-xs">
+//                       Buy Now
+//                     </button>
+//                   </NavLink>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+
+//         {/* Info Boxes Section */}
+//         <div className="px-4 container grid gap-2 sm:grid-cols-2 lg:grid-cols-4 mt-8 mx-auto">
+//           <div className="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 className="font-medium text-xl"> 🚚 Free Delivery</h2>
+//               <p className="text-gray-600">Orders from all items</p>
+//             </div>
+//           </div>
+
+//           <div className="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 className="font-medium text-xl">💰 Return & Refund</h2>
+//               <p className="text-gray-600">Money back guarantee</p>
+//             </div>
+//           </div>
+
+//           <div className="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 className="font-medium text-xl">🛍️ Member Discount</h2>
+//               <p className="text-gray-600">On order over $99</p>
+//             </div>
+//           </div>
+
+//           <div className="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 className="font-medium text-xl ">📞 Support 24/7</h2>
+//               <p className="text-gray-600">Contact us 24 hours a day</p>
+//             </div>
+//           </div>
+//         </div>
+
+//         <div className="h-[10vh] "></div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default Products
+
+
+
+// import React from 'react'
+// import Nav from './Nav'
+// import { NavLink } from 'react-router-dom';
+
+// function Products({ cart, setCart, setSearch }) {
+
+
+//   const decreaseQuantity = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart.map((it) =>
+//         it.name === itemsss.name
+//           ? { ...it, quantity: it.quantity - 1 }
+//           : it
+//       )
+//         .filter((it) => it.quantity > 0)
+//     );
+//   };
+
+//   const increaseQuantity = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart.map((it) =>
+//         it.name === itemsss.name
+//           ? { ...it, quantity: it.quantity + 1 }
+//           : it
+//       )
+//     );
+//   };
+
+//   const removeItem = (itemsss) => {
+//     setCart((prevCart) =>
+//       prevCart.filter((it) => it.name !== itemsss.name)
+//     );
+//   };
+
+//   // 🔹 Total amount calculate karna
+//   // rate string hai e.g. "8.56$" → usko number me convert karna
+//   const totalAmount = cart.reduce((total, item) => {
+//     const price = parseFloat(item.rate.replace('$', '')); // $ hatake number banaya
+//     return total + price * item.quantity;
+//   }, 0);
+
+//   return (
+//     <div className='h-screen relative'>
+//       <Nav cart={cart} setSearch={setSearch} />
+//       <div className='h-[15%] w-[100%] '></div>
+
+//       <div className='itemdiv h-auto  w-[100%] flex flex-col items-center justify-center'>
+
+//         {/* 🔹 Total Amount aur Checkout Button */}
+//         <div className='h-[10vh] w-[85%] flex items-center justify-between bg-gray-100 rounded mb-6'>
+//           <h1 className='text-xl font-semibold'>Total Amount: <span className="text-blue-600">${totalAmount.toFixed(2)}</span></h1>
+//           <NavLink to={'/login'}><button className='px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded'>
+//             Proceed to Checkout
+//           </button></NavLink>
+//         </div>
+
+//         <div className='itemdiv2 h-auto w-[85%]   flex justify-around flex-wrap '>
+//           {
+//             cart.map((p, i) => (
+
+//               <div key={i} className='card border h-[48vh] w-[22%] m-3 flex flex-col  items-start justify-around'>
+
+//                 <div className='cardimg h-[65%] w-full flex items-center justify-center'>
+//                   <img src={p.photo} alt={p.title}
+//                     className="h-[80%] w-[60%]  transition-transform duration-500 hover:scale-125" />
+//                 </div>
+
+//                 <div className='cardtxt h-[35%]  w-full flex border' >
+
+//                   <div className='w-[80%] px-3 text-left  flex justify-around flex-col'>
+//                     <NavLink to={`/product/${p.name}`} ><h1 className="font-semibold hover:underline text-black text-[15px]">
+//                       {p.name}
+//                     </h1></NavLink>
+//                     <h1 className="text-[12px]">{p.rating}</h1>
+//                     <h1 className='text-[18px] text-blue-500'>{p.rate}</h1>
+
+//                     <div className='border w-[80%] flex justify-around items-center '>
+//                       <button onClick={() => decreaseQuantity(p)}><b>-</b></button>
+//                       <h1>{p.quantity}</h1>
+//                       <button onClick={() => increaseQuantity(p)}><b>+</b></button>
+//                       <button onClick={() => removeItem(p)}>❌</button>
+//                     </div>
+//                   </div>
+
+//                   <div className=' w-[30%] flex items-center justify-center'>
+//                     <NavLink to={'/login'}> <button className='bg-blue-500 hover:bg-pink-600 text-white rounded p-2 text-xs'>Buy Now</button></NavLink>
+//                   </div>
+
+//                 </div>
+//               </div>
+
+
+//             ))
+//           }
+
+//         </div>
+
+//         <div class=" px-4 container grid gap-2 sm:grid-cols-2 lg:grid-cols-4 mt-8 mx-auto">
+
+//           <div class="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 class="font-medium text-xl"> 🚚Free Delivery</h2>
+//               <p class="text-gray-600">Orders from all items</p>
+//             </div>
+//           </div>
+
+//           <div class="flex bg-sky-100 px-4 py-6 font-karla">
+//             <div>
+//               <h2 class="font-medium text-xl">💰Return & Refund</h2>
+//               <p class="text-gray-600">Money back guarantee</p>
+//             </div>
+//           </div>
+
+
+//           <div class="flex bg-sky-100  px-4 py-6 font-karla">
+//             <div>
+//               <h2 class="font-medium text-xl">🛍️ Member Discount</h2>
+//               <p class="text-gray-600">On order over $99</p>
+//             </div>
+//           </div>
+
+
+//           <div class="flex bg-sky-100  px-4 py-6 font-karla">
+//             <div>
+//               <h2 class="font-medium text-xl ">📞 Support 24/7</h2>
+//               <p class="text-gray-600">Contact us 24 hours a day</p>
+//             </div>
+//           </div>
+
+//         </div>
+
+//         <div className='h-[10vh] ' ></div>
+//       </div>
+
+
+
+
+//     </div>
+//   )
+// }
+
+// export default Products
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import React, { useState, useEffect } from 'react';
 // import Nav from './Nav';
 // import './home.css';
