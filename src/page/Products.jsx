@@ -1,41 +1,56 @@
+// ✅ Full Redux-integrated version of your original Products.jsx
+
 import React from 'react';
 import Nav from './Nav';
 import { NavLink } from 'react-router-dom';
 
-function Products({ cart, setCart, setSearch }) {
+// 🟢 Redux imports
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart, removeFromCart, decrement } from '../features/cartSlice'; 
 
-  const decreaseQuantity = (item) => {
-    setCart(prevCart =>
-      prevCart
-        .map(it => it.name === item.name ? { ...it, quantity: it.quantity - 1 } : it)
-        .filter(it => it.quantity > 0)
-    );
-  };
+function Products() {
 
+  // 🟢 Access Redux store
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  // 🟢 Increase quantity
   const increaseQuantity = (item) => {
-    setCart(prevCart =>
-      prevCart.map(it => it.name === item.name ? { ...it, quantity: it.quantity + 1 } : it)
-    );
+    dispatch(addToCart(item)); // same action used for increment
   };
 
+  // 🟢 Decrease quantity
+  const decreaseQuantity = (item) => {
+    if (item.quantity > 1) {
+      dispatch(decrement(item)); // custom action added in cartSlice
+    } else {
+      dispatch(removeFromCart(item));
+    }
+  };
+
+  // 🟢 Remove item
   const removeItem = (item) => {
-    setCart(prevCart => prevCart.filter(it => it.name !== item.name));
+    dispatch(removeFromCart(item));
   };
 
   // 💰 Calculate total dynamically
   const total = cart
-    .reduce((acc, item) => acc + parseFloat(item.rate.replace('$', '')) * item.quantity, 0)
+    .reduce(
+      (acc, item) => acc + parseFloat(item.rate.replace('$', '')) * item.quantity,
+      0
+    )
     .toFixed(2);
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Nav cart={cart} setSearch={setSearch} />
+      {/* 🟢 Nav Component */}
+      <Nav />
 
       <div className="h-[13vh]"></div>
 
       <div className="itemdiv flex flex-col md:flex-row w-[90%] mx-auto">
 
-        {/* Left Sidebar */}
+        {/* 🟢 Left Sidebar */}
         <div className="md:w-[30%]">
           <div className="px-2 text-center container grid gap-2 grid-cols-2 mx-auto">
             <div className="flex items-center justify-center bg-gray-100 py-4 font-karla">
@@ -67,12 +82,16 @@ function Products({ cart, setCart, setSearch }) {
             </div>
           </div>
 
-          {/* Cart Summary */}
+          {/* 🟢 Cart Summary */}
           <div className="border p-4 m-2">
-            <input className='border w-full m-1 p-1' placeholder='Enter your Email'></input>
-            <input className='border w-full m-1 p-1' placeholder='Enter Mobile Number'></input>
-            <input className='border w-full m-1 p-1' placeholder='Enter Your Name'></input>
-            <input className='border w-full m-1 p-1' placeholder='Enter full Address'></input>
+            <input className="border w-full m-1 p-1" placeholder="Enter your Email" />
+            <input
+              className="border w-full m-1 p-1"
+              placeholder="Enter Mobile Number"
+              type="number"
+            />
+            <input className="border w-full m-1 p-1" placeholder="Enter Your Name" />
+            <input className="border w-full m-1 p-1" placeholder="Enter full Address" />
             <h2 className="text-lg font-bold mb-2">Cart Summary</h2>
             <div className="flex justify-between">
               <h1>Subtotal</h1>
@@ -95,48 +114,219 @@ function Products({ cart, setCart, setSearch }) {
           </div>
         </div>
 
-        {/* Products Grid */}
+        {/* 🟢 Products Grid */}
         <div className="itemdiv2 w-full flex flex-wrap justify-center md:w-[65%]">
-          {cart.map(item => (
-            <div key={item.name} className="card border h-[30vh] md:h-[45vh] w-[42%] md:w-[30%] m-3 flex flex-col items-start justify-around">
-              <div className="cardimg h-[65%] w-full flex items-center justify-center">
-                <img
-                  className="h-[80%] w-[60%] transition-transform duration-500 hover:scale-125"
-                  src={item.photo}
-                  alt={item.name}
-                />
-              </div>
-
-              <div className="cardtxt h-[35%] border w-full px-3 text-left flex flex-col justify-around">
-
-                <NavLink to={`/product/${item.name}`}>
-                  <h1 className="font-semibold hover:underline text-black text-[9px] md:text-[15px]">{item.name}</h1>
-                </NavLink>
-
-                <h1 className="text-[8px] md:text-[12px]">{item.rating}</h1>
-
-                <h1 className="text-[12px] md:text-[18px] text-blue-500">
-                  {item.rate} <span className="text-gray-600 text-[9px] md:text-[13px]"><del>{item.rate2}</del></span>
-                </h1>
-
-                <div className="w-[80%] flex justify-around items-center">
-                  <button onClick={() => decreaseQuantity(item)} className="text-[8px] md:text-[22px]"><b>-</b></button>
-                  <h1 className="text-[12px] md:text-[15px]">{item.quantity}</h1>
-                  <button onClick={() => increaseQuantity(item)} className="text-[8px] md:text-[22px]"><b>+</b></button>
-                  <button onClick={() => removeItem(item)} className="text-[8px] md:text-[15px]">❌</button>
+          {cart.length === 0 ? (
+            <h2 className="text-gray-500 text-center text-lg">Your cart is empty 😢</h2>
+          ) : (
+            cart.map((item) => (
+              <div
+                key={item.name}
+                className="card border h-[30vh] md:h-[45vh] w-[42%] md:w-[30%] m-3 flex flex-col items-start justify-around"
+              >
+                <div className="cardimg h-[65%] w-full flex items-center justify-center">
+                  <img
+                    className="h-[80%] w-[60%] transition-transform duration-500 hover:scale-125"
+                    src={item.photo}
+                    alt={item.name}
+                  />
                 </div>
 
-              </div>
-            </div>
-          ))}
-        </div>
+                <div className="cardtxt h-[35%] border w-full px-3 text-left flex flex-col justify-around">
+                  <NavLink to={`/product/${item.name}`}>
+                    <h1 className="font-semibold hover:underline text-black text-[9px] md:text-[15px]">
+                      {item.name}
+                    </h1>
+                  </NavLink>
 
+                  <h1 className="text-[8px] md:text-[12px]">{item.rating}</h1>
+
+                  <h1 className="text-[12px] md:text-[18px] text-blue-500">
+                    {item.rate}{" "}
+                    <span className="text-gray-600 text-[9px] md:text-[13px]">
+                      <del>{item.rate2}</del>
+                    </span>
+                  </h1>
+
+                  <div className="w-[80%] flex justify-around items-center">
+                    {/* 🟢 Decrement */}
+                    <button
+                      onClick={() => decreaseQuantity(item)}
+                      className="text-[8px] md:text-[22px]"
+                    >
+                      <b>-</b>
+                    </button>
+
+                    <h1 className="text-[12px] md:text-[15px]">{item.quantity}</h1>
+
+                    {/* 🟢 Increment */}
+                    <button
+                      onClick={() => increaseQuantity(item)}
+                      className="text-[8px] md:text-[22px]"
+                    >
+                      <b>+</b>
+                    </button>
+
+                    {/* 🟢 Remove */}
+                    <button
+                      onClick={() => removeItem(item)}
+                      className="text-[8px] md:text-[15px]"
+                    >
+                      ❌
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 export default Products;
+
+
+// import React from 'react';
+// import Nav from './Nav';
+// import { NavLink } from 'react-router-dom';
+
+// function Products({ cart, setCart, setSearch }) {
+
+//   const decreaseQuantity = (item) => {
+//     setCart(prevCart =>
+//       prevCart
+//         .map(it => it.name === item.name ? { ...it, quantity: it.quantity - 1 } : it)
+//         .filter(it => it.quantity > 0)
+//     );
+//   };
+
+//   const increaseQuantity = (item) => {
+//     setCart(prevCart =>
+//       prevCart.map(it => it.name === item.name ? { ...it, quantity: it.quantity + 1 } : it)
+//     );
+//   };
+
+//   const removeItem = (item) => {
+//     setCart(prevCart => prevCart.filter(it => it.name !== item.name));
+//   };
+
+//   // 💰 Calculate total dynamically
+//   const total = cart
+//     .reduce((acc, item) => acc + parseFloat(item.rate.replace('$', '')) * item.quantity, 0)
+//     .toFixed(2);
+
+//   return (
+//     <div className="min-h-screen flex flex-col">
+//       <Nav cart={cart} setSearch={setSearch} />
+
+//       <div className="h-[13vh]"></div>
+
+//       <div className="itemdiv flex flex-col md:flex-row w-[90%] mx-auto">
+
+//         {/* Left Sidebar */}
+//         <div className="md:w-[30%]">
+//           <div className="px-2 text-center container grid gap-2 grid-cols-2 mx-auto">
+//             <div className="flex items-center justify-center bg-gray-100 py-4 font-karla">
+//               <div>
+//                 <h2 className="font-medium text-sm">🚚 Free Delivery</h2>
+//                 <p className="text-gray-600 text-xs">Orders from all items</p>
+//               </div>
+//             </div>
+
+//             <div className="flex bg-gray-100 items-center justify-center py-4 font-karla">
+//               <div>
+//                 <h2 className="font-medium text-sm">💰 Return & Refund</h2>
+//                 <p className="text-gray-600 text-xs">Money back guarantee</p>
+//               </div>
+//             </div>
+
+//             <div className="flex bg-gray-100 items-center justify-center py-4 font-karla">
+//               <div>
+//                 <h2 className="font-medium text-sm">🛍️ Member Discount</h2>
+//                 <p className="text-gray-600 text-xs">On order over $99</p>
+//               </div>
+//             </div>
+
+//             <div className="flex bg-gray-100 items-center justify-center font-karla">
+//               <div>
+//                 <h2 className="font-medium text-sm">📞 Support 24/7</h2>
+//                 <p className="text-gray-600 text-xs">Contact us 24 hours a day</p>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Cart Summary */}
+//           <div className="border p-4 m-2">
+//             <input className='border w-full m-1 p-1' placeholder='Enter your Email'></input>
+//             <input className='border w-full m-1 p-1' placeholder='Enter Mobile Number' type='number'></input>
+//             <input className='border w-full m-1 p-1' placeholder='Enter Your Name'></input>
+//             <input className='border w-full m-1 p-1' placeholder='Enter full Address'></input>
+//             <h2 className="text-lg font-bold mb-2">Cart Summary</h2>
+//             <div className="flex justify-between">
+//               <h1>Subtotal</h1>
+//               <h1>${total}</h1>
+//             </div>
+//             <div className="flex justify-between text-green-600">
+//               <h1>Discount (10%)</h1>
+//               <span>- ${(total * 0.1).toFixed(2)}</span>
+//             </div>
+//             <hr className="my-2" />
+//             <div className="flex justify-between font-bold text-blue-600">
+//               <span>Total</span>
+//               <span>${(total * 0.9).toFixed(2)}</span>
+//             </div>
+//             <NavLink to="/login">
+//               <button className="text-[15px] p-3 w-full mt-4 md:py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg md:text-lg font-bold transition-transform transform hover:scale-105">
+//                 Proceed to Checkout
+//               </button>
+//             </NavLink>
+//           </div>
+//         </div>
+
+//         {/* Products Grid */}
+//         <div className="itemdiv2 w-full flex flex-wrap justify-center md:w-[65%]">
+//           {cart.map(item => (
+//             <div key={item.name} className="card border h-[30vh] md:h-[45vh] w-[42%] md:w-[30%] m-3 flex flex-col items-start justify-around">
+//               <div className="cardimg h-[65%] w-full flex items-center justify-center">
+//                 <img
+//                   className="h-[80%] w-[60%] transition-transform duration-500 hover:scale-125"
+//                   src={item.photo}
+//                   alt={item.name}
+//                 />
+//               </div>
+
+//               <div className="cardtxt h-[35%] border w-full px-3 text-left flex flex-col justify-around">
+
+//                 <NavLink to={`/product/${item.name}`}>
+//                   <h1 className="font-semibold hover:underline text-black text-[9px] md:text-[15px]">{item.name}</h1>
+//                 </NavLink>
+
+//                 <h1 className="text-[8px] md:text-[12px]">{item.rating}</h1>
+
+//                 <h1 className="text-[12px] md:text-[18px] text-blue-500">
+//                   {item.rate} <span className="text-gray-600 text-[9px] md:text-[13px]"><del>{item.rate2}</del></span>
+//                 </h1>
+
+//                 <div className="w-[80%] flex justify-around items-center">
+//                   <button onClick={() => decreaseQuantity(item)} className="text-[8px] md:text-[22px]"><b>-</b></button>
+//                   <h1 className="text-[12px] md:text-[15px]">{item.quantity}</h1>
+//                   <button onClick={() => increaseQuantity(item)} className="text-[8px] md:text-[22px]"><b>+</b></button>
+//                   <button onClick={() => removeItem(item)} className="text-[8px] md:text-[15px]">❌</button>
+//                 </div>
+
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Products;
 
 
 
