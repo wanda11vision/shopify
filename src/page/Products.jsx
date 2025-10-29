@@ -117,7 +117,7 @@ function Products() {
         {/* 🟢 Products Grid */}
         <div className="itemdiv2 w-full flex flex-wrap justify-center md:w-[65%]">
           {cart.length === 0 ? (
-            <h2 className="text-gray-500 text-center text-lg">Your cart is empty 😢</h2>
+            <h2 className="text-green-500 text-center font-mono md:text-3xl">Your cart is empty 😢</h2>
           ) : (
             cart.map((item) => (
               <div
